@@ -10,6 +10,3 @@ Install packages and symlink configs:
 Symlink configs (requires stow):
 `~/.dotfiles/02-configs.sh`
 
-#### Neovim
-
-Run `~/.dotfiles/.config/nvim/lsp.sh` to install LSP binaries.

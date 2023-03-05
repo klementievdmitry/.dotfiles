@@ -5,23 +5,8 @@
 
 ### Wayland dotfiles
 
--   Compositor: [River](https://github.com/riverwm/river)
+-   Compositor: [Hyprland](https://github.com/hyprwm/Hyprland)
 -   Bar: [Waybar](https://github.com/Alexays/Waybar)
--   Notification daemon: [Mako](https://github.com/emersion/mako)
+-   Notification daemon: [Dunst](https://github.com/dunst-project/dunst)
 -   Editor: [NeoVim](https://github.com/neovim/neovim)
 
-### Setup
-
-For setting up, see [SETUP.md](./.assets/SETUP.md)
-
-### Screenshots
-
-<details>
-<summary>Screenshots</summary>
-
-![Alt](./.assets/screenshots/1.png)
-![Alt](./.assets/screenshots/2.png)
-
-</details>
-
-If you come across any issue, open an issue in this repo [here](https://github.com/klementievdmitry/.dotfiles/issues/new).
