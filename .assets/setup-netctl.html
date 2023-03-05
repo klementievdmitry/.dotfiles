@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ArchLinux - Using netctl to setup the network - Programmable Production</title>
+
+  <!-- Edit site and author settings in `_config.yml` to make the social details your own -->
+
+  <meta content="Programmable Production" property="og:site_name"> 
+  <meta content="ArchLinux - Using netctl to setup the network" property="og:title">  
+  <meta content="article" property="og:type">  
+  <meta content="For developer who want to learn devops
+" property="og:description">  
+  <meta content="http://blog.programmableproduction.com/2016/02/15/ArchLinux-Setting-Network-With-Netctl/" property="og:url">  
+  <meta content="2016-02-15T00:00:00+00:00" property="article:published_time">
+  <meta content="http://blog.programmableproduction.com/about/" property="article:author">  
+  <meta content="http://blog.programmableproduction.com/assets/img/david-zucker.jpg" property="og:image">   
+  <meta content="ArchLinux" property="article:section">    
+  <meta content="ArchLinux," property="article:tag"> 
+  <meta content="network," property="article:tag"> 
+  <meta content="netctl" property="article:tag">  
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@">
+  <meta name="twitter:creator" content="@"> 
+  <meta name="twitter:title" content="ArchLinux - Using netctl to setup the network">  
+  <meta name="twitter:url" content="http://blog.programmableproduction.com/2016/02/15/ArchLinux-Setting-Network-With-Netctl/">  
+  <meta name="twitter:description" content="For developer who want to learn devops
+">  
+  <meta name="twitter:image:src" content="http://blog.programmableproduction.com/assets/img/david-zucker.jpg"> 
+
+  <meta name="description" content="">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:image" content="">
+  <meta name="google-site-verification" content="{side.google-site-verification}" />
+  <link rel="shortcut icon" href=" /assets/img/favicon/favicon.ico " type="image/x-icon">
+  <link rel="apple-touch-icon" href=" /assets/img/favicon/apple-touch-icon.png ">
+  <link rel="apple-touch-icon" sizes="72x72" href=" /assets/img/favicon/apple-touch-icon-72x72.png
+    ">
+  <link rel="apple-touch-icon" sizes="114x114" href=" /assets/img/favicon/apple-touch-icon-114x114.png
+    ">
+  <!-- Chrome, Firefox OS and Opera -->
+  <meta name="theme-color" content="#263959">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#263959">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="#263959">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href=" /assets/fonts/font-awesome/css/font-awesome.min.css ">
+  <!-- Styles -->
+  <link rel="stylesheet" href=" /assets/css/main.css ">
+</head>
+<body>
+
+  <div class="wrapper">
+    <aside class="sidebar">
+  <header>
+    <div class="about">
+      <div class="cover-author-image">
+        <a href="/">
+          <img src="/assets/img/david-zucker.jpg" alt="Programmable Production">
+        </a>
+      </div>
+      <div class="author-name">Programmable Production</div>
+      <p>For developer who like to learn about devops</p>
+    </div>
+  </header>
+  <!-- End Header -->
+  <footer>
+    <section class="contact">
+      <h3 class="contact-title">Contact me</h3>
+      <ul>
+          
+        <li class="github">
+          <a href="http://github.com/davzucky" target="_blank">
+            <i class="fa fa-github"></i>
+          </a>
+        </li>
+         
+        <li class="linkedin">
+          <a href="https://in.linkedin.com/in/david-zucker-5909a01" target="_blank">
+            <i class="fa fa-linkedin"></i>
+          </a>
+        </li>
+         
+        <li class="email">
+          <a href="mailto:david@programmableproduction.com">
+            <i class="fa fa-envelope-o"></i>
+          </a>
+        </li>
+        
+      </ul>
+    </section>
+    <!-- End Section Contact -->
+    <div class="copyright">
+      <p>2018 &copy; Programmable Production</p>
+    </div>
+  </footer>
+  <!-- End Footer -->
+</aside>
+<!-- End Sidebar -->
+<div class="content-box">
+  <article class="article-page">
+  <div class="page-content">
+    
+    
+    <div class="wrap-content">
+      <header class="header-page">
+        <h1 class="page-title">ArchLinux - Using netctl to setup the network</h1>
+        <div class="page-date"><span>2016, Feb 15&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+      </header>
+      <p>For this article we will focus on network setup (at least what I’ve found so far) and will look at some of the useful commands that I now use often.</p>
+
+<p>Setting up the network, and more specifically the wifi can be traumatic. However, even without X windows there are some nice simple tools to help you to setup the wifi connection (like ‘wifi-menu’ that we used earlier).</p>
+
+<p>If you follow the step to set up the base installation from this <a href="Need to define">article</a>, you should already have from your base installation the packages <a href="https://wiki.archlinux.org/index.php/netctl">netctl</a> and <a href="http://linuxcommand.org/lc3_adv_dialog.php">dialog</a>. <em>netctl</em> is a batch script built on top of systemctl that allows you to start or stop the network profile configuration service.</p>
+
+<h1 id="connecting-manually">Connecting Manually</h1>
+
+<p>Before trying to connect using some auto detection, it would be good to understand what is happening under the hood. <em>netctl</em> is a simple command that allow you to list available profiles, start a profile or stop a profile. In this section we will first look at how to setup a wired connection followed by a wifi one, and then get a quick overview of the netctl command line tool.</p>
+
+<h2 id="setting-up-an-ethernet-profile">Setting up an Ethernet profile</h2>
+
+<p><em>netctl</em> stores the connection profile in the folder <em>/etc/netctl</em>. This folder has a child one named <em>/etc/netctl/example</em> which contain a set of different example profiles. We are interested here in the example profile whose name starts with ‘ethernet’. In my case I have 3 examples:</p>
+
+<ul>
+  <li>ethernet-custom : allows you to see all the available fields you can set up</li>
+  <li>ethernet-dhcp : example to connect and get the IP address from a DHCP server</li>
+  <li>ethernet-static : example to setup a profile using a static IP address</li>
+</ul>
+
+<p>As my router is doing as well DHCP server for me, I will simply set up the profile using ethernet-dhcp as a sample. The steps we have to do are:</p>
+
+<h3 id="find-the-ethernet-network-interface-name">Find the ethernet network interface name</h3>
+<p>Linux has a command line <em>ip</em> utility that allow you to query and update the network interfaces. The command line to run to list the network interfaces is</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ip link
+</code></pre></div></div>
+
+<p>The result of the query is in my case
+<img src="/assets/posts/2016-02-15-ArchLinux-Setting-Network-With-Netctl/IpLinkResult.png" alt="IpLinkResult" /><br />
+  The ethernet adaptor name starts everytime with <em>enp</em> - in my case the name is <em>enp3s0</em></p>
+
+<h3 id="copy-the-example-etcnetctlexampleethernet-dhcp-to-etcnetctl">Copy the example <em>/etc/netctl/example/ethernet-dhcp</em> to <em>/etc/netctl</em></h3>
+<p>We need to copy the example file <em>/etc/netctl/example/ethernet-dhcp</em> to the folder <em>/etc/netctl</em> and give it a name that is meaningful. In my case I will name it <em>enp3s0-ethernet-dhcp</em> because it’s a good representation of the profile’s meaning.
+Back to the command shell to copy the file using :</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cp /etc/netctl/example/ethernet-dhcp /etc/netctl/enp3s0-ethernet-dhcp
+</code></pre></div></div>
+
+<h3 id="edit-the-profile">Edit the Profile</h3>
+<p>You can use any text editor that you want - <em>vim</em> is the one I’m using every time. We want to open <em>/etc/netctl/enp3s0-ethernet-dhcp</em> to change the property <em>Interface</em> with the one we found at step 1.
+The content you should have in the file at minimum is :</p>
+
+<p><img src="/assets/posts/2016-02-15-ArchLinux-Setting-Network-With-Netctl/enp3s0-ethernet-dhcp-Content.png" alt="profile Content" /></p>
+
+<h3 id="check-the-permission">Check the permission</h3>
+<p>The profile we just updated is good, however this is not protected against being seen by unauthorised users. This profile doesn’t have a lot of important information, although it will do later on for the wifi setup. We will change the password using the command line <em>chmod</em> and set read/write only for the root users.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chmod 600 enp3s0-ethernet-dhcp
+</code></pre></div></div>
+
+<h3 id="plug-in-the-ethernet-cable-and-start-the-profile">Plug in the ethernet cable and start the profile</h3>
+<p>We can now plug in our ethernet cable and start the profile. We will use the command line netctl. The command to start the profile is</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>netctl start enp3s0-ethernet-dhcp
+</code></pre></div></div>
+
+<p>The best command to test that the profile is enabled and that you can access the network is to ping the google dhcp server with the address 8.8.8.8 :-)</p>
+
+<h2 id="setting-wifi-profile">Setting wifi profile</h2>
+
+<p>If you installed the package <em>dialog</em> in the first post about installing <em>archlinix</em>, this allows you to use a simple user interface that doesn’t require X windows to be installed. The command we will use is <em>wifi-menu</em>, which is a simple script built on top of netctl.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Please always use the command *wifi-menu* with the option *-o* to be sure that the password is hashed in the profile file.
+</code></pre></div></div>
+<p>Running the command <em>wifi-menu</em> will create the profile file in the folder <em>/etc/netctl</em> and connect you to the network at the same time. You can even run the command again to connect to the wifi anytime you want to change the connection. The command you have to run is the following</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>wifi-menu <span class="nt">-o</span>
+</code></pre></div></div>
+
+<p>You will see the following displayed:</p>
+
+<p><img src="/assets/posts/2016-02-15-ArchLinux-Setting-Network-With-Netctl/wifi-menu.png" alt="wifi-menu" /></p>
+
+<p>Creating a wifi profile is simple with the use of <em>wifi-menu</em>. However you can also create a wifi profile using the same type of manual steps as we used to set up the ethernet connection. The hardest part I found about doing that is that you need to know the wifi security type and you may have to put your password in clear.</p>
+
+<h2 id="usage-of-netctl">Usage of <em>netctl</em></h2>
+<p>Earlier we already use the command <em>netctl</em> to start the ethernet connectoin. <em>netctl</em> has a lot more option that I will list now.</p>
+
+<ul>
+  <li>List and display active connection</li>
+  <li>Stop/Start connection</li>
+  <li>Enable/Disable auto start connection</li>
+</ul>
+
+<h3 id="listing-the-profile-available">Listing the profile available</h3>
+<p><em>netctl</em> is using the folder <em>/etc/netctl</em> to save the registered profile. What is good is that the tool has an option to list that directly and display as well the connections that are active with a *.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netctl list
+</code></pre></div></div>
+
+<p>The output of that command will look like that.
+<img src="/assets/posts/2016-02-15-ArchLinux-Setting-Network-With-Netctl/netctl-list.png" alt="netctl-list" /></p>
+
+<h3 id="starting-and-stoping-profile">Starting and stoping profile</h3>
+<p><em>netctl</em> allow to start and stop connection profile. This command require root permission and need to be run under <em>sudo</em>.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># start the connection</span>
+<span class="nb">sudo </span>netctl start wpl1s0-myconnection
+
+<span class="c"># Stop the connection</span>
+<span class="nb">sudo </span>netctl stop wlp1s0-myconnection
+</code></pre></div></div>
+
+<h3 id="enable-and-disable-auto-connection-as-start">Enable and disable auto connection as start</h3>
+<p><em>netctl</em> can add a conneciton into <em>systemctl</em> which control the linux services. This is really usefull if you are connection everytime with the same profile, like ethernet or your home wifi. We will see later on how we could automate that even more so the system can detect and automatically switch profile for you.</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#Enable the profile wlp1s0-myconnection to start at boot</span>
+<span class="nb">sudo </span>netctl <span class="nb">enable </span>wpl1s0-myconnection
+
+<span class="c">#Disable the prfile wlp1s0-myconnection to start at boot</span>
+<span class="nb">sudo </span>netctl disable wpl1s0-myconnection
+</code></pre></div></div>
+
+<h2 id="automating-auto-connection">Automating auto connection</h2>
+<p>The information below come from the Archlinux Wiki on [netctl][https://wiki.archlinux.org/index.php/netctl#Automatic_switching_of_profiles]. The next step will require you to have a network connection active (ethernet or wifi) because we will need to install some new packages.</p>
+
+<h3 id="ethernet">Ethernet</h3>
+<p>So far you can only connect using the command line <em>netctl</em>. This is great, however it would be even better if when you plug-in an ethernet cable your computer reconize it and get automatically an IP address. Luckilly they are a service that you can install that know how to read the <em>netctl</em> config file and which will automatically handle the connection. The package is named <em>ifplugd</em>.</p>
+
+<ul>
+  <li>Install ifplugd</li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>pacman <span class="nt">-S</span> ifplugd
+</code></pre></div></div>
+
+<ul>
+  <li>Enable the service
+Please note that you need to replace <em>enp3s0</em> with the identifier of your network interface.</li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl <span class="nb">enable </span>netctl-ifplugd@enp3s0.service
+</code></pre></div></div>
+
+<h3 id="wifi">Wifi</h3>
+<p>I will provide you as well the way for the Wifi connection to automatically witch between your available profile and pick up the best one. Personally I don’t like my computer to do think for me and I don’t mind typing one command to connect, so I haven’t enabled this service. I feel as well it’s more secure that way.
+The service that allow auto connection of wifi profile is named <em>wpa_actiond</em>.</p>
+
+<ul>
+  <li>Install wpa_actiond</li>
+</ul>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>pacman <span class="nt">-S</span> wpa_actiond
+</code></pre></div></div>
+
+<ul>
+  <li>Enable the service
+Please note tht you need to replace teh <em>wlp1s0</em> wuth the identifier of your wifi interface</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo systemctl enable netctl-auto@wlp1s0.service
+</code></pre></div></div>
+
+<h1 id="summary">Summary</h1>
+<p>Great, now we have some network, which will allow us to install new package and application to setup the rest of the computer. One think we will foccus on next is the user interface. This will make the computer little more firendly :-).
+See you on the next post.</p>
+
+      <div class="page-footer">
+        <div class="page-share">
+          <a href="https://twitter.com/intent/tweet?text=ArchLinux - Using netctl to setup the network&url=http://blog.programmableproduction.com/2016/02/15/ArchLinux-Setting-Network-With-Netctl/" title="Share on Twitter" rel="nofollow" target="_blank">Twitter</a>
+          <a href="https://facebook.com/sharer.php?u=http://blog.programmableproduction.com/2016/02/15/ArchLinux-Setting-Network-With-Netctl/" title="Share on Facebook" rel="nofollow" target="_blank">Facebook</a>
+          <a href="https://plus.google.com/share?url=http://blog.programmableproduction.com/2016/02/15/ArchLinux-Setting-Network-With-Netctl/" title="Share on Google+" rel="nofollow" target="_blank">Google+</a>
+        </div>
+        <div class="page-tag">
+          
+            <a href="/tags#ArchLinux," class="tag">&#35; ArchLinux,</a>
+          
+            <a href="/tags#network," class="tag">&#35; network,</a>
+          
+            <a href="/tags#netctl" class="tag">&#35; netctl</a>
+          
+        </div>
+      </div>
+      <section class="comment-area">
+  <div class="comment-wrapper">
+    
+    <div id="disqus_thread" class="article-comments"></div>
+    <script>
+      (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//programmableproduction.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the
+      <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+    </noscript>
+    
+  </div>
+</section>
+<!-- End Comment Area -->
+    </div> <!-- End Wrap Content -->
+  </div> <!-- End Page Content -->
+</article> <!-- End Article Page -->
+
+</div>
+  </div>
+  
+  <script>
+  (function (i, s, o, g, r, a, m) {
+  i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+    (i[r].q = i[r].q || []).push(arguments)  
+}, i[r].l = 1 * new Date(); a = s.createElement(o),
+    m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-73704356-1', 'auto');
+  ga('send', 'pageview');
+</script>
+<!-- End Analytics -->
+</body>
+</html>
