@@ -35,7 +35,7 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-sy
 
 # Change shell for root
 echo -e "[${Red}*${Whi}] Changing shell for user"
-chsh -s /usr/bin/zsh
+chsh -s /usr/bin/nu
 
 # Clone GTK theme(s) and icons
 echo -e "[${Gre}*${Whi}] Cloning GTK theme and icons"

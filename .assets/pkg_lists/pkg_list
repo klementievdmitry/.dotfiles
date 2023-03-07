@@ -1,11 +1,9 @@
 git
 neovim
 firefox
-ranger
 neofetch
 brightnessctl
 wl-clipboard
-zsh
 polkit-gnome
 swaybg
 swaylock
@@ -14,9 +12,7 @@ bat
 ttf-jetbrains-mono
 lxappearance
 nodejs
-mako
 stow
-foot
 wayland
 wayland-protocols
 wlroots
@@ -41,5 +37,8 @@ selene-linter
 obs-studio
 rustup
 grim
-neovide
 viewnior
+wireplumber
+wezterm
+nushell
+xplr
