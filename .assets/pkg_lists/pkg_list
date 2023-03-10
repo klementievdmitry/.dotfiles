@@ -7,9 +7,7 @@ wl-clipboard
 polkit-gnome
 swaybg
 swaylock
-exa
 bat
-ttf-jetbrains-mono
 lxappearance
 nodejs
 stow
@@ -38,8 +36,6 @@ obs-studio
 rustup
 grim
 viewnior
-wireplumber
 wezterm
 nushell
-xplr
 helix
