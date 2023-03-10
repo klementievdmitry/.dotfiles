@@ -27,7 +27,7 @@ do
 	sudo aura -Acax --noconfirm $aur_pkg
 done
 
-# Change shell for root
+# Change shell for root (nushell)
 echo -e "[${Red}*${Whi}] Changing shell for user"
 chsh -s /usr/bin/nu
 
