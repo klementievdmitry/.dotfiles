@@ -645,5 +645,5 @@ let-env config = {
   ]
 }
 
-alias l = ls
-
+alias ls = ls -a
+alias hx = helix
