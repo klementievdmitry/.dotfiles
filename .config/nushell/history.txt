@@ -1,2 +1,0 @@
-rm .config/nushell/history.txt
-git status
