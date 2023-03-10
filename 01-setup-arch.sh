@@ -27,13 +27,7 @@ do
 	sudo aura -Acax --noconfirm $aur_pkg
 done
 
-# Setup ZSH
-echo -e "[${Gre}*${Whi}] Setting up ZSH plugins"
-mkdir -p ~/.zsh
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
-
-# Change shell for root
+# Change shell for root (nushell)
 echo -e "[${Red}*${Whi}] Changing shell for user"
 chsh -s /usr/bin/nu
 
